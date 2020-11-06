@@ -1,29 +1,18 @@
-# README #
+# VirBELA Coding Test #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+Welcome. We've created this test to gain insights into your development skills. Please follow the instructions below.
 
-### What is this repository for? ###
+### Test overview ###
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+In this test you'll be asked to complete one or more exercises. When completed you'll push this repo to a public repository for evaluation. After evaluation, your contact at VirBELA will reach out to you with next steps.
 
-### How do I get set up? ###
+Feel free to use whatever resources you'd typically use when doing development work at a job. Internet searches, books, etc. are all acceptable sources. Your friend, internet coder for hire, or an already completed test are not.
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+### Instructions ###
 
-### Contribution guidelines ###
+* Clone this repository to your development machine.
+* Navigate to the exercise you've been instructed to complete for detailed instructions.
 
-* Writing tests
-* Code review
-* Other guidelines
+### Exercises ###
 
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+* [Exercise 1](./Exercise1/EXERCISE_1.md)
