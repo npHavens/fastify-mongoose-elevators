@@ -23,6 +23,12 @@ const routes = [
     handler: elevatorController.getElevatorById
   },
   {
+    method: 'POST',
+    url: '/api/buildings/:buildingId/go',
+    // schema: { body: { type: 'string' }},
+    handler: elevatorController.goToQueuedFloors
+  },
+  {
     method: 'PATCH',
     url: '/api/buildings/:buildingId/elevators/:elevatorId',
     // schema: { body: { type: 'string' }},
@@ -39,11 +45,11 @@ const routes = [
         const { floorCount } = await buildingController.getBuildingById(request, reply)
 
         if (request.query.floor < 1) {
-          reply.badRequest('Floor must be 1 or greater')
+          return reply.badRequest('Floor must be 1 or greater')
         }
 
         if (request.query.floor > floorCount) {
-          reply.badRequest(`Building ${ request.params.buildingId } only contains ${ floorCount } floors`)
+          return reply.badRequest(`Building ${ request.params.buildingId } only contains ${ floorCount } floors`)
         }
         return elevatorController.goToFloor(request, reply)
       }

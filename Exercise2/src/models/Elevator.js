@@ -6,11 +6,11 @@ const elevatorSchema = new mongoose.Schema({
     type: Number,
     ref: 'Elevator'
    },
-  currentFloor: { type: Number, default: 0 },
+  currentFloor: { type: Number, default: 1 },
   floorsToVisit:  {
     type: mongoose.Schema.Types.Array,
   },
-  status: String
+  status: { type: String, default: 'closed' }
 }, { _id: false })
 
 module.exports = mongoose.model('Elevator', elevatorSchema)
