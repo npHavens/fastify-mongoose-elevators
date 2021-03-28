@@ -38,6 +38,10 @@ const routes = [
       if (request.query.floor) {
         const { floorCount } = await buildingController.getBuildingById(request, reply)
 
+        if (request.query.floor < 1) {
+          reply.badRequest('Floor must be 1 or greater')
+        }
+
         if (request.query.floor > floorCount) {
           reply.badRequest(`Building ${ request.params.buildingId } only contains ${ floorCount } floors`)
         }

@@ -44,12 +44,13 @@ exports.updateElevatorStatus = async (request, reply) => {
 
 exports.goToFloor = async (request, reply) => {
   try {
-      //const { isDoorOpen } = Elevator.findById(request.params.elevatorId)
-    console.log('FLOOR', request.params.elevatorId, request.query)
-    return Elevator.findByIdAndUpdate(request.params.elevatorId, {
+    const elevatorData = await Elevator.findByIdAndUpdate(request.params.elevatorId, {
       currentFloor: request.query.floor,
       status: 'open'
     }, { new: true })
+
+    console.log(`Elevator ${ request.params.elevatorId } in building ${ request.params.buildingId } is now on floor ${ elevatorData.currentFloor } with door ${ elevatorData.status }`)
+    return Promise.resolve(elevatorData)
   } catch (err) {
       console.log('ERRRORR', err)
     //throw boom.boomify(err)
