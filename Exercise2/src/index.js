@@ -11,7 +11,6 @@ mongoose.connect('mongodb://virbela_node_client:32agrt56sg@localhost:27017/virbe
  .catch(err => console.log(err))
 
 // Register Plugins
-fastify.register(require('fastify-url-data'))
 fastify.register(require('fastify-sensible'))
 fastify.register(require('fastify-swagger'), {
   exposeRoute: true

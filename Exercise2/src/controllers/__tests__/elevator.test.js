@@ -6,8 +6,6 @@ const {
     queueFloor
 } = require('../elevator.js')
 
-const mockingoose = require('mockingoose');
-
 const MockElevator = require('../../models/Elevator');
 
 jest.mock('../../models/Elevator')
