@@ -510,6 +510,14 @@ fastify-swagger@^4.4.2:
     json-schema-resolver "^1.2.0"
     openapi-types "^7.2.3"
 
+fastify-url-data@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/fastify-url-data/-/fastify-url-data-3.0.3.tgz#80ec67bf7563c128358f05b4330dc71022f55cfe"
+  integrity sha512-fw9F6JhAPjg8oHm1xyZCcdj/agY8+z3xGZBUoHrUvBXOW0PDH+yDBihOsCeXYk4fbpI0KfJ9E44a5KOgpQkoBw==
+  dependencies:
+    fastify-plugin "^2.0.0"
+    uri-js "^4.2.1"
+
 fastify-warning@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/fastify-warning/-/fastify-warning-0.2.0.tgz#e717776026a4493dc9a2befa44db6d17f618008f"
@@ -1534,7 +1542,7 @@ update-notifier@^4.1.0:
     semver-diff "^3.1.1"
     xdg-basedir "^4.0.0"
 
-uri-js@^4.2.2:
+uri-js@^4.2.1, uri-js@^4.2.2:
   version "4.4.1"
   resolved "https://registry.yarnpkg.com/uri-js/-/uri-js-4.4.1.tgz#9b1a52595225859e55f669d928f88c6c57f2a77e"
   integrity sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==

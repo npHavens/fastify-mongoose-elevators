@@ -1,99 +1,101 @@
 const Elevator = require('../models/Elevator.js')
 
 exports.addElevator = async (request, reply) => {
-    try {
-      const elevator = new Elevator(request.body)
-      return elevator.save()
-    } catch (err) {
-        console.log('ERRRORR', err)
-      //throw boom.boomify(err)
-    }
+  try {
+    const elevator = new Elevator(request.body)
+    return elevator.save()
+  } catch (err) {
+    return reply.internalServerError(err)
+  }
 }
 
 exports.getElevators = async (request, reply) => {
-    try {
-        //console.log('REQ', request.body.buildingId)
-      return Elevator.find()
-    } catch (err) {
-        console.log('ERRRORR', err)
-      //throw boom.boomify(err)
-    }
+  try {
+    return Elevator.find()
+  } catch (err) {
+    return reply.internalServerError(err)
+  }
 }
+
 exports.getElevatorById = async (request, reply) => {
   try {
-    console.log('GETTING EL BY ID', request.params.elevatorId)
     return Elevator.findById(request.params.elevatorId)
   } catch (err) {
-      console.log('ERRRORR', err)
-    //throw boom.boomify(err)
+    return reply.internalServerError(err)
   }
 }
 
 exports.updateElevatorStatus = async (request, reply) => {
   try {
-      //const { isDoorOpen } = Elevator.findById(request.params.elevatorId)
-      //console.log('TOGGLING', request.params.elevatorId, request.query)
     return Elevator.findByIdAndUpdate(request.params.elevatorId, {
       status: request.query.status,
     }, { new: true })
   } catch (err) {
-      console.log('ERRRORR', err)
-    //throw boom.boomify(err)
+    return reply.internalServerError(err)
   }
 }
 
-exports.goToFloor = async (request, reply) => {
+exports.getElevatorsByBuildingId = async (buildingId) => {
   try {
-    const elevatorDoc = await Elevator.findById(request.params.elevatorId)
+    return Elevator.find({ buildingId })
+  } catch (err) {
+    reply.internalServerError(err)
+  }
+}
 
-    if (!elevatorDoc.floorsToVisit.includes(request.query.floor) && Number(request.query.floor) !== elevatorDoc.currentFloor) {
-      const updated = [...elevatorDoc.floorsToVisit, Number(request.query.floor), elevatorDoc.currentFloor]
+exports.queueFloor = async (request, reply) => {
+  const { params, query } = request
+  try {
+    const elevatorDoc = await Elevator.findById(params.elevatorId)
+    const isValidFloorRequest = !elevatorDoc.floorsToVisit.includes(query.floor) && Number(query.floor) !== elevatorDoc.currentFloor
 
-      console.log(`Elevator ${ request.params.elevatorId } in building ${ request.params.buildingId } is now on floor ${ elevatorDoc.currentFloor } with door ${ elevatorDoc.status }`)
+    if (isValidFloorRequest) {
+      const updatedFloors = [
+        ...elevatorDoc.floorsToVisit,
+        Number(query.floor),
+        // Temporarily add current floor to queue to sort and find the next closest floor
+        elevatorDoc.currentFloor
+      ]
 
-     const sorted = updated.sort((a, b) => {
-       return a - b
-     })
+      const sortedFloors = updatedFloors.sort((a, b) => a - b)
+      let currentFloorIndex = sortedFloors.indexOf(elevatorDoc.currentFloor)
 
-     let currentFloorIndex = sorted.indexOf(elevatorDoc.currentFloor)
+      // Check if a lower or higher floor is closer while handling the edge case of no higher floors existing
+      const lowerDiff = sortedFloors[currentFloorIndex] - sortedFloors[currentFloorIndex - 1]
+      const upperDiff = (sortedFloors[currentFloorIndex + 1] || sortedFloors[currentFloorIndex]) - sortedFloors[currentFloorIndex]
 
-     const lowerDiff = sorted[currentFloorIndex] - sorted[currentFloorIndex - 1]
-     const upperDiff = (sorted[currentFloorIndex + 1] || sorted[currentFloorIndex]) - sorted[currentFloorIndex]
+      let nextFloorIndex, queue, remainingFloors
 
-    let nextFloorIndex, queue, lastFloors
+      // Reorder the floor queue based on whether a higher or lower floor is closest
+      if (upperDiff <= lowerDiff) {
+        nextFloorIndex = sortedFloors[currentFloorIndex + 1]
+        remainingFloors = sortedFloors.slice(0, currentFloorIndex)
+          .sort((a, b) => b - a)
 
-    if (upperDiff <= lowerDiff) {
+        queue = sortedFloors.slice(currentFloorIndex)
+          .concat(remainingFloors)
+      } else {
+        nextFloorIndex = sortedFloors[currentFloorIndex - 1]
+        remainingFloors = sortedFloors.slice(currentFloorIndex + 1)
 
-      nextFloorIndex = sorted[currentFloorIndex + 1]
+        queue = sortedFloors.slice(0, currentFloorIndex + 1)
+          .sort(((a, b) => b - a))
+          .concat(remainingFloors)
+      }
+      // Remove the temporary current floor from the queue before saving
+      elevatorDoc.floorsToVisit = queue.filter((item) => {
+        return item !== elevatorDoc.currentFloor
+      })
 
-      lastFloors = sorted.slice(0, currentFloorIndex).sort((a, b) => b - a)
-
-      queue = sorted.slice(currentFloorIndex).concat(lastFloors)
-    } else {
-
-      nextFloorIndex = sorted[currentFloorIndex - 1]
-
-      lastFloors = sorted.slice(currentFloorIndex + 1)
-       queue = sorted.slice(0, currentFloorIndex + 1).sort(((a, b) => {
-        return b - a
-      })).concat(lastFloors)
-    }
-
-     elevatorDoc.floorsToVisit = queue.filter((item) => {
-       return item !== elevatorDoc.currentFloor
-     })
-
-     const updatedDoc = await elevatorDoc.save({ new: true })
-
+      const updatedDoc = await elevatorDoc.save({ new: true })
       return Promise.resolve(updatedDoc)
- 
+
     } else {
       return reply.conflict(`Floor ${ request.query.floor } is already in queue or is current floor`)
     }
 
   } catch (err) {
-      console.log('ERRRORR', err)
-    //throw boom.boomify(err)
+    reply.internalServerError(err)
   }
 }
 
@@ -103,8 +105,12 @@ exports.goToQueuedFloors = async (request, reply) => {
 
   for (const item of elevatorDocs) {
     for (const targetFloor of item.floorsToVisit) {
-      await goToFloor(request.params.buildingId, item._id, targetFloor)
-      count++
+      try {
+        await goToFloor(request.params.buildingId, item._id, targetFloor)
+        count++
+      } catch (err) {
+        reply.internalServerError(err)
+      }
     }
   }
 
@@ -112,28 +118,24 @@ exports.goToQueuedFloors = async (request, reply) => {
 }
 
 const goToFloor = async (builingId, elevatorId, targetFloor) => {
-  const updated = await Elevator.findByIdAndUpdate(elevatorId, {
-    currentFloor: targetFloor,
-    status: 'open'
-  })
-
-  console.log(`Elevator ${ elevatorId } in building ${ builingId } going from floor ${ updated.currentFloor } to ${ targetFloor }`)
-  console.log(`Elevator ${ elevatorId } in building ${ builingId } Door open`)
-
-  await Elevator.findByIdAndUpdate(elevatorId, {
-    floorsToVisit: updated.floorsToVisit.slice(1),
-    status: 'closed'
-  }, { new: true })
-
-  console.log(`Elevator ${ elevatorId } in building ${ builingId } Door closed`)
-}
-
-exports.getElevatorsByBuildingId = async (buildingId) => {
   try {
-    return Elevator.find({ buildingId })
-  } catch (err) {
-      console.log('ERRRORR', err)
-    //throw boom.boomify(err)
-  }
-}
+    const updated = await Elevator.findByIdAndUpdate(elevatorId, {
+      currentFloor: targetFloor,
+      status: 'open'
+    })
 
+    console.log(`Elevator ${ elevatorId } in building ${ builingId } going from floor ${ updated.currentFloor } to ${ targetFloor }`)
+    console.log(`Elevator ${ elevatorId } in building ${ builingId } Door open`)
+
+    // Remove floor from queue and close door after it is visited
+    await Elevator.findByIdAndUpdate(elevatorId, {
+      floorsToVisit: updated.floorsToVisit.slice(1),
+      status: 'closed'
+    }, { new: true })
+
+    console.log(`Elevator ${ elevatorId } in building ${ builingId } Door closed`)
+  } catch (err) {
+    return Promise.reject(err)
+  }
+
+}
