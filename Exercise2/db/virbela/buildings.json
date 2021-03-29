@@ -1,0 +1,25 @@
+{ 
+    "_id" : NumberInt(1), 
+    "floorCount" : NumberInt(50), 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : NumberInt(2), 
+    "floorCount" : NumberInt(100), 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : NumberInt(3), 
+    "floorCount" : NumberInt(10), 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : NumberInt(4), 
+    "floorCount" : NumberInt(10), 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : NumberInt(5), 
+    "floorCount" : NumberInt(10), 
+    "__v" : NumberInt(0)
+}

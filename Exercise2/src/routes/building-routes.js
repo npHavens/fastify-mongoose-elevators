@@ -1,6 +1,5 @@
 const elevatorController = require('../controllers/elevator.js')
 const buildingController = require('../controllers/building.js')
-const Building = require('../models/Building.js')
 
 const getAllElevatorsForBuilding = async (request, reply) => {
     const buildingData = await buildingController.getBuildingById(request, reply)

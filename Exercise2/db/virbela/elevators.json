@@ -1,0 +1,40 @@
+{ 
+    "_id" : "B", 
+    "currentFloor" : NumberInt(1), 
+    "floorsToVisit" : [
+
+    ], 
+    "buildingId" : NumberInt(1), 
+    "__v" : NumberInt(0), 
+    "status" : "closed"
+}
+{ 
+    "_id" : "C", 
+    "currentFloor" : NumberInt(1), 
+    "floorsToVisit" : [
+
+    ], 
+    "buildingId" : NumberInt(1), 
+    "__v" : NumberInt(0), 
+    "status" : "closed"
+}
+{ 
+    "_id" : "A", 
+    "currentFloor" : NumberInt(1), 
+    "floorsToVisit" : [
+
+    ], 
+    "buildingId" : NumberInt(1), 
+    "__v" : NumberInt(65), 
+    "status" : "closed"
+}
+{ 
+    "_id" : "D", 
+    "currentFloor" : NumberInt(1), 
+    "floorsToVisit" : [
+
+    ], 
+    "status" : "closed", 
+    "__v" : NumberInt(0), 
+    "buildingId" : NumberInt(2)
+}
