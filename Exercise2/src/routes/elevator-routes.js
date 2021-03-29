@@ -1,15 +1,6 @@
 const elevatorController = require('../controllers/elevator.js')
+const { ElevatorSchema } = require('../schemas')
 
-const ElevatorSchema = {
-    type: 'object',
-    properties: {
-        "currentFloor": { type: 'number' },
-        "floorsToVisit": { type: 'array', items: { type: 'number' } },
-        "_id": { type: 'number' },
-        "buildingId": { type: 'number' },
-        "__v": { type: 'number' }
-    }
-}
 
 exports.elevatorRoutes = [
     {
@@ -37,7 +28,7 @@ exports.elevatorRoutes = [
                 type: 'object',
                 required: ['_id'],
                 properties: {
-                    _id: { type: 'number' }
+                    _id: { type: 'string' }
                 }
             },
             response: {

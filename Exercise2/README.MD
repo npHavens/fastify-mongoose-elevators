@@ -20,6 +20,7 @@ Documentation is hosted by the server at the below url
 
 ### Notes ###
 - Built in ID generation for Mongoose has ben overridden with 1 digit ID's for simplicity sake and readability
+- There are some existing Building and Elevator collections in the `db` directory that can be optionally imported
 
 ### Questions ###
 How can your implementation be optimized?

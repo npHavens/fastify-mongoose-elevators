@@ -1,27 +1,18 @@
 const elevatorController = require('../controllers/elevator.js')
 const buildingController = require('../controllers/building.js')
+const { ElevatorSchema } = require('../schemas')
+const { BuildingSchema } = require('../schemas')
 
-const getAllElevatorsForBuilding = async (request, reply) => {
+const getElevatorsByBuilding = async (request, reply) => {
     const buildingData = await buildingController.getBuildingById(request, reply)
     const elevators = await elevatorController.getElevatorsByBuildingId(buildingData._id)
 
     return reply.send({
-      buildingData: {
         _id: buildingData._id,
         floorCount: buildingData.floorCount,
         elevators
-      }
     })
 }
-
-const BuildingSchema = { 
-    type: 'object',
-    properties: {
-        _id: { type: 'number' },
-        floorCount: { type: 'number' },
-        __v: { type: 'number' }
-    }
-  }
 
 exports.buildingRoutes = [
       {
@@ -89,11 +80,11 @@ exports.buildingRoutes = [
                     properties: {
                         _id: { type: 'number' },
                         floorCount: { type: 'number' },
-                        elevators:  { type: 'array' }
+                        elevators:  { type: 'array', items: ElevatorSchema }
                     }
                 }
             }
         },
-        handler: getAllElevatorsForBuilding
+        handler: getElevatorsByBuilding
       },
 ]

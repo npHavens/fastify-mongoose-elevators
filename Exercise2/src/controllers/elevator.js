@@ -2,7 +2,11 @@ const Elevator = require('../models/Elevator.js')
 
 exports.addElevator = async (request, reply) => {
   try {
-    const elevator = new Elevator(request.body)
+    const elevator = new Elevator({
+      _id: request.body._id,
+      buildingId: request.params.buildingId
+    })
+
     return elevator.save()
   } catch (err) {
     return reply.internalServerError(err)
