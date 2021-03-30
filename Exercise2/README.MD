@@ -16,7 +16,7 @@
 
 
 ### Swagger ###
-Documentation is hosted by the server at the below url
+Documentation is hosted by the server at the following url
 [http://localhost:3000/documentation](http://localhost:3000/documentation)
 
 ### Notes ###
@@ -27,7 +27,7 @@ Documentation is hosted by the server at the below url
 How can your implementation be optimized?
   - Calls to the DB could be reduced by using MongoDB queries for the aggregation calls instead of multiple Mongoose methods.
 
-  - The amount of sorting could be reduced in the queueFloor controller but since I assume there won't ever be more than a few hundred floors in a building it should be a trivial amount of time tp process.
+  - The amount of sorting could be reduced in the queueFloor controller but since I assume there won't ever be more than a few hundred floors in a building it should be a trivial amount of time to process.
 
   - I didn't have time to do the optimization for elevators going to floors most visited at certain times of day but I did optimize it to go up or down based on which floor is closer, and then go to all remaining floors in queue in logical order.
 
