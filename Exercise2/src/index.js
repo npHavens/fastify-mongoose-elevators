@@ -6,6 +6,7 @@ const routes = require('./routes')
 const { validateFloorRequest } = require('./hooks')
 
 // Connect to DB
+// These creds would be supplied by environment variables in a real production app
 mongoose.connect('mongodb://virbela_node_client:32agrt56sg@localhost:27017/virbela', {useNewUrlParser: true, useUnifiedTopology: true })
  .then(() => console.log('MongoDB connected…'))
  .catch(err => console.log(err))
