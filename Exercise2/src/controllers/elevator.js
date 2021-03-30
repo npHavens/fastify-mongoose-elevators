@@ -64,7 +64,7 @@ exports.queueFloor = async (request, reply) => {
       const sortedFloors = updatedFloors.sort((a, b) => a - b)
       let currentFloorIndex = sortedFloors.indexOf(elevatorDoc.currentFloor)
 
-      // Check if a lower or higher floor is closer while handling the edge case of no higher floors existing
+      // Check if a lower or higher floor is closer while handling the edge case of being on the top floorå
       const lowerDiff = sortedFloors[currentFloorIndex] - sortedFloors[currentFloorIndex - 1]
       const upperDiff = (sortedFloors[currentFloorIndex + 1] || sortedFloors[currentFloorIndex]) - sortedFloors[currentFloorIndex]
 

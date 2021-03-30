@@ -11,7 +11,12 @@ exports.addBuilding = async (req, reply) => {
 
 exports.getBuildings = async (request, reply) => {
   try {
-    return Building.find()
+    const buildings = await Building.find()
+
+    if (!buildings) {
+      return reply.notFound('No buildings exist')
+    }
+    return buildings
   } catch (err) {
     return reply.internalServerError(err)
   }
@@ -19,7 +24,12 @@ exports.getBuildings = async (request, reply) => {
 
 exports.getBuildingById = async (request, reply) => {
   try {
-    return Building.findById(request.params.buildingId)
+    const building = await Building.findById(request.params.buildingId)
+    console.log('BUILDONG', building)
+    if (!building) {
+      return reply.notFound(`No building found for ${ request.params.buildingId }`)
+    }
+    return building
   } catch (err) {
     return reply.internalServerError(err)
   }
