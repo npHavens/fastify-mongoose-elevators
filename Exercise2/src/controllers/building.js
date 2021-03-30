@@ -25,7 +25,6 @@ exports.getBuildings = async (request, reply) => {
 exports.getBuildingById = async (request, reply) => {
   try {
     const building = await Building.findById(request.params.buildingId)
-    console.log('BUILDONG', building)
     if (!building) {
       return reply.notFound(`No building found for ${ request.params.buildingId }`)
     }
